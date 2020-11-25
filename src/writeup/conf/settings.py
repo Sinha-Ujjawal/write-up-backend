@@ -78,8 +78,13 @@ WSGI_APPLICATION = "conf.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        # Using postgres for this project
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.setdefault("DJANGO__DATABASE_NAME", "writeup"),
+        "USER": os.environ.setdefault("DJANGO__DATABASE_USER", "postgres"),
+        "PASSWORD": os.environ.setdefault("DJANGO__DATABASE_PASSWORD", "postgres"),
+        "HOST": os.environ.setdefault("DJANGO__DATABASE_HOST", "localhost"),
+        "PORT": os.environ.setdefault("DJANGO__DATABASE_PORT", "5432"),
     }
 }
 
