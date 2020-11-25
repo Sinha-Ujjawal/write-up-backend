@@ -40,9 +40,24 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "users",
+    "oauth2_provider",
+    "corsheaders",
+]
+AUTH_USER_MODEL = "users.user"
+LOGIN_URL = "/admin/login/"
+CORS_ORIGIN_ALLOW_ALL = (
+    os.environ.setdefault("DJANGO__CORS_ORIGIN_ALLOW_ALL", "True") == "True"
+)
+
+AUTHENTICATION_BACKENDS = [
+    "oauth2_provider.backends.OAuth2Backend",
+    # Uncomment following if you want to access the admin
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -50,6 +65,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # If you use SessionAuthenticationMiddleware, be sure it appears before OAuth2TokenMiddleware.
+    # SessionAuthenticationMiddleware is NOT required for using django-oauth-toolkit.
+    # "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
+    "oauth2_provider.middleware.OAuth2TokenMiddleware",
 ]
 
 ROOT_URLCONF = "conf.urls"
